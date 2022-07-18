@@ -3,7 +3,7 @@ README.md
 setup.py
 discursus_utils/__init__.py
 discursus_utils/content_auditor.py
-discursus_utils/saving_ops.py
+discursus_utils/persistance_ops.py
 discursus_utils/scraping_ops.py
 discursus_utils.egg-info/PKG-INFO
 discursus_utils.egg-info/SOURCES.txt
