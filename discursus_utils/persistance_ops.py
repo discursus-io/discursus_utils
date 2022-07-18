@@ -60,10 +60,13 @@ def get_saved_data_asset(context, df_data_asset, file_path):
         "aws_client"
     }
 )
-def materialize_data_asset(context, df_data_asset, file_path, asset_key_parent, asset_key_child, asset_description):
+def materialize_data_asset(context, df_data_asset, file_path):
     context.log.info("Materializing data asset")
 
     s3_bucket_name = context.resources.aws_client.get_s3_bucket_name()
+    asset_key_parent = context.op_config["asset_key_parent"]
+    asset_key_child = context.op_config["asset_key_child"]
+    asset_description = context.op_config["asset_description"]
     
     # Materialize asset
     yield AssetMaterialization(
