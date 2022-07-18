@@ -18,6 +18,26 @@ We assume you are running a Docker file such as the one we have in the [Core rep
 The only thing you need to add is this line that will load the GDELT library to your instance of the social analytics framework.
 `RUN pip3 install git+https://github.com/discursus-io/discursus_utils@release/0.1`
 
+## Calling a op
+When you call function (a Dagster op) from the library, you will need to pass the resources you configured.
+
+```
+aws_configs = config_from_files(['configs/aws_configs.yaml'])
+gdelt_configs = config_from_files(['configs/gdelt_configs.yaml'])
+
+my_aws_client = aws_client.configured(aws_configs)
+my_gdelt_client = gdelt_resources.gdelt_client.configured(gdelt_configs)
+
+@job(
+    resource_defs = {
+        'aws_client': my_aws_client,
+        'gdelt_client': my_gdelt_client
+    }
+)
+def mine_gdelt_data():
+    latest_gdelt_events_s3_location = gdelt_mining_ops.mine_gdelt_events()
+```
+
 ## Configurations
 ### Configure the AWS Resource
 Create a aws configuration file (`aws_configs.yamls`) in the `configs` section of the core framwork.
@@ -59,26 +79,6 @@ def aws_client(context):
     return AWSClient(
         s3_bucket_name = context.resource_config["resources"]["s3"]["config"]["bucket_name"]
     )
-```
-
-## Calling a function
-When you call function (a Dagster op) from the library, you will need to pass the resources you configured.
-
-```
-aws_configs = config_from_files(['configs/aws_configs.yaml'])
-gdelt_configs = config_from_files(['configs/gdelt_configs.yaml'])
-
-my_aws_client = aws_client.configured(aws_configs)
-my_gdelt_client = gdelt_resources.gdelt_client.configured(gdelt_configs)
-
-@job(
-    resource_defs = {
-        'aws_client': my_aws_client,
-        'gdelt_client': my_gdelt_client
-    }
-)
-def mine_gdelt_data():
-    latest_gdelt_events_s3_location = gdelt_mining_ops.mine_gdelt_events()
 ```
 
 
