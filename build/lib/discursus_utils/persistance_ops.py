@@ -9,7 +9,8 @@ from io import StringIO
 import pandas as pd
 
 
-# Op to save the latest GDELT events to S3
+################
+# Op to save asset to S3
 @op(
     required_resource_keys = {
         "aws_client"
@@ -28,7 +29,32 @@ def save_data_asset(context, df_data_asset, file_path):
     return df_data_asset
 
 
-# Op to materialize the url metadata as a data asset in Dagster
+################
+# Op to get asset from S3
+@op(
+    required_resource_keys = {
+        "aws_client"
+    }
+)
+def get_saved_data_asset(context, df_data_asset, file_path):
+    context.log.info("Getting data asset from S3")
+
+    s3_bucket_name = context.resources.aws_client.get_s3_bucket_name()
+    
+    s3 = boto3.resource('s3')
+    csv_buffer = StringIO()
+    df_data_asset.to_csv(csv_buffer, index = False)
+    s3.Object(s3_bucket_name, file_path).put(Body=csv_buffer.getvalue())
+    filename = context.op_config["asset_materialization_path"].split("s3://" + s3_bucket_name + "/")[1]
+    obj = s3.Object(s3_bucket_name, filename)
+
+    df_data_asset = pd.read_csv(StringIO(obj.get()['Body'].read().decode('utf-8')))
+
+    return df_data_asset
+
+
+################
+# Op to materialize data asset in Dagster
 @op(
     required_resource_keys = {
         "aws_client"
