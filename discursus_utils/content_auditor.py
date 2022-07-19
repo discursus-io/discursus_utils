@@ -5,11 +5,9 @@ from bs4 import BeautifulSoup
 import urllib.request
 import urllib.error
 import random
-import csv
 import urllib.parse
 import re
 import time
-import os
 
 class ContentAuditor:
 
