@@ -31,20 +31,17 @@ class ContentAuditor:
         """
         ua_string = 'Content-Audit/2.0'
         for url in self.urls:
-            print("Parsing %s" % url)
             self.url_parts = urllib.parse.urlparse(url)
             req = urllib.request.Request(url)
             req.add_header('User-Agent', ua_string)
             try:
                 data = urllib.request.urlopen(req, timeout = 5)
             except Exception as e:
-                print(e)
                 continue
             self.soupy_data = BeautifulSoup(data, features="html.parser")
             try:
                 self.extract_tags(url)
             except Exception as e:
-                print(e)
                 continue
             time.sleep(random.uniform(1, 3))
         print("End of extraction")
@@ -68,7 +65,6 @@ class ContentAuditor:
         try:
             page_info['name'] = self.soupy_data.h3.get_text()
         except Exception as e:
-            print(e)
             page_info['name'] = ''
         self.add_necessary_tags(page_info, ['keywords', 'description', 'title'])
         self.site_info.append(page_info)
