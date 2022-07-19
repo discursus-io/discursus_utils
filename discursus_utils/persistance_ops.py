@@ -37,10 +37,10 @@ def save_data_asset(context, df_data_asset, file_path):
     }
 )
 def get_saved_data_asset(context):
-    context.log.info("Getting data asset from S3")
-
     s3_bucket_name = context.resources.aws_client.get_s3_bucket_name()
     filepath = context.op_config["asset_materialization_path"].split("s3://" + s3_bucket_name + "/")[1]
+
+    context.log.info("Getting data asset from S3: " + str(filepath))
     
     s3 = boto3.resource('s3')
     obj = s3.Object(s3_bucket_name, filepath)
