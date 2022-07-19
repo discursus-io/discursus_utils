@@ -40,10 +40,10 @@ def get_saved_data_asset(context):
     context.log.info("Getting data asset from S3")
 
     s3_bucket_name = context.resources.aws_client.get_s3_bucket_name()
-    filename = context.op_config["asset_materialization_path"].split("s3://" + s3_bucket_name + "/")[1]
+    filepath = context.op_config["asset_materialization_path"].split("s3://" + s3_bucket_name + "/")[1]
     
     s3 = boto3.resource('s3')
-    obj = s3.Object(s3_bucket_name, filename)
+    obj = s3.Object(s3_bucket_name, filepath)
 
     df_data_asset = pd.read_csv(StringIO(obj.get()['Body'].read().decode('utf-8')))
 
