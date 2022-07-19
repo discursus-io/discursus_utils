@@ -15,7 +15,7 @@ class ContentAuditor:
         """
         Initialization method for the ContentAuditor class.
         """
-        self.urls = df_urls.iloc[:,url_field_index]
+        self.urls = list(dict.fromkeys(df_urls.iloc[:,url_field_index]))
         self.soupy_data = ""
         self.content = ""
         self.text_file = ""
