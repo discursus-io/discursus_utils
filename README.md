@@ -1,7 +1,7 @@
 # discursus GDELT library
 This library provides [ops](https://docs.dagster.io/concepts/ops-jobs-graphs/ops) to extend the functionalities of the core framework.
 
-It is part of the [discursus Social Analytics OSS Framework](https://github.com/discursus-io/discursus_core). Please visit the repo for more information. And visit us at [discursus.io] for more context on our mission.
+It is part of the [discursus Social Analytics OSS Framework](https://github.com/discursus-io/discursus_core). Please visit the repo for more information. And visit us at [discursus.io](https://www.discursus.io) for more context on our mission.
 
 &nbsp;
 
