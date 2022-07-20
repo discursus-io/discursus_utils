@@ -66,7 +66,5 @@ class WebScraper:
         except:
             page_info['description'] = " "
 
-        print(page_info)
-
         self.site_info.append(page_info)
         self.soupy_data = ""
