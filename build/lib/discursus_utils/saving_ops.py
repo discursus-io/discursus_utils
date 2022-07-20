@@ -8,7 +8,7 @@ import zipfile
 from io import StringIO
 import pandas as pd
 
-from discursus_utils import content_auditor
+from discursus_utils import web_scraper
 
 
 # Op to save the latest GDELT events to S3

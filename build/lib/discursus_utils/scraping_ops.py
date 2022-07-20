@@ -3,14 +3,14 @@ from dagster import op, AssetMaterialization, Output
 from urllib.request import urlopen, urlretrieve
 import pandas as pd
 
-from discursus_utils import content_auditor
+from discursus_utils import web_scraper
 
 ################
 # Op to get the meta data from a list of urls
 @op
 def get_meta_data(context, df_urls):
     url_field_index = context.op_config["url_field_index"]
-    content_bot = content_auditor.ContentAuditor(df_urls, url_field_index)
+    content_bot = web_scraper.ContentAuditor(df_urls, url_field_index)
 
     # Enhance urls
     context.log.info("Enhancing " + str(len(content_bot.urls)) + " urls")

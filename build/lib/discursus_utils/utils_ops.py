@@ -8,7 +8,7 @@ import zipfile
 from io import StringIO
 import pandas as pd
 
-from discursus_utils import content_auditor
+from discursus_utils import web_scraper
 
 ######################
 # SCRAPING OPS
@@ -22,7 +22,7 @@ from discursus_utils import content_auditor
     }
 )
 def get_meta_data(context, latest_gdelt_events_s3_location):
-    content_bot = content_auditor.ContentAuditor(s3_bucket_name, filename)
+    content_bot = web_scraper.ContentAuditor(s3_bucket_name, filename)
 
     # Enhance urls
     context.log.info("Enhancing " + str(len(content_bot.article_urls)) + " articles")

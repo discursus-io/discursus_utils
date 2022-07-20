@@ -1,6 +1,3 @@
-# Credit goes to...
-# https://github.com/quakerpunk/content-audit/blob/origin/content_audit.py
-
 from bs4 import BeautifulSoup
 import urllib.request
 import urllib.error
@@ -9,11 +6,11 @@ import urllib.parse
 import re
 import time
 
-class ContentAuditor:
+class WebScraper:
 
     def __init__(self, df_urls, url_field_index):
         """
-        Initialization method for the ContentAuditor class.
+        Initialization method for the WebScraper class.
         """
         self.urls = list(dict.fromkeys(df_urls.iloc[:,url_field_index]))
         self.soupy_data = ""
@@ -37,14 +34,15 @@ class ContentAuditor:
             try:
                 data = urllib.request.urlopen(req, timeout = 5)
             except Exception as e:
+                print(e)
                 continue
             self.soupy_data = BeautifulSoup(data, features="html.parser")
             try:
                 self.extract_tags(url)
             except Exception as e:
+                print(e)
                 continue
             time.sleep(random.uniform(1, 3))
-        print("End of extraction")
 
 
     def extract_tags(self, url):
@@ -54,29 +52,21 @@ class ContentAuditor:
         """
         page_info = {}
         page_info['mention_identifier'] = url
-
-        for tag in self.soupy_data.find_all('meta', attrs={"name": True}):
-            try:
-                page_info[tag['name']] = tag['content']
-            except:
-                page_info[tag['name']] = ''
-        page_info['title'] = self.soupy_data.head.title.contents[0]
         page_info['filename'] = self.url_parts[2]
         try:
-            page_info['name'] = self.soupy_data.h3.get_text()
-        except Exception as e:
-            page_info['name'] = ''
-        self.add_necessary_tags(page_info, ['keywords', 'description', 'title'])
+            page_info['title'] = self.soupy_data.head.title.contents[0]
+        except:
+            page_info['title'] = " "
+        try:
+            page_info['keywords'] = self.soupy_data.find("meta", { "name": "keywords"})["content"]
+        except:
+            page_info['keywords'] = " "
+        try:
+            page_info['description'] = self.soupy_data.find("meta", { "name": "description"})["content"]
+        except:
+            page_info['description'] = " "
+
+        print(page_info)
+
         self.site_info.append(page_info)
         self.soupy_data = ""
-
-
-    def add_necessary_tags(self, info_dict, needed_tags):
-        """
-        This method insures that missing tags have a null value
-        before they are written to the output spreadhseet.
-        """
-        for key in needed_tags:
-            if key not in info_dict:
-                info_dict[key] = " "
-        return info_dict

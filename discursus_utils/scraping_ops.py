@@ -3,25 +3,25 @@ from dagster import op, AssetMaterialization, Output
 from urllib.request import urlopen, urlretrieve
 import pandas as pd
 
-from discursus_utils import content_auditor
+from discursus_utils import web_scraper
 
 ################
 # Op to get the meta data from a list of urls
 @op
 def get_meta_data(context, df_urls):
     url_field_index = context.op_config["url_field_index"]
-    content_bot = content_auditor.ContentAuditor(df_urls, url_field_index)
+    my_scraper = web_scraper.WebScraper(df_urls, url_field_index)
 
     # Enhance urls
-    context.log.info("Enhancing " + str(len(content_bot.urls)) + " urls")
-    content_bot.read_url()
+    context.log.info("Enhancing " + str(len(my_scraper.urls)) + " urls")
+    my_scraper.read_url()
 
     # Create dataframe
     column_names = ['mention_identifier', 'page_name', 'file_name', 'page_title', 'page_description', 'keywords']
     df_enhanced_urls = pd.DataFrame(columns = column_names)
 
     # write meta data
-    for dex in content_bot.site_info:
+    for dex in my_scraper.site_info:
         row = [
             dex['mention_identifier'], 
             dex['name'], 
