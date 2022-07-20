@@ -54,15 +54,15 @@ class WebScraper:
         page_info['mention_identifier'] = url
         page_info['filename'] = self.url_parts[2]
         try:
-            page_info['title'] = self.soupy_data.head.title.contents[0]
+            page_info['title'] = str(self.soupy_data.head.title.contents[0])
         except:
             page_info['title'] = " "
         try:
-            page_info['keywords'] = self.soupy_data.find("meta", { "name": "keywords"})["content"]
+            page_info['keywords'] = str(self.soupy_data.find("meta", { "name": "keywords"})["content"])
         except:
             page_info['keywords'] = " "
         try:
-            page_info['description'] = self.soupy_data.find("meta", { "name": "description"})["content"]
+            page_info['description'] = str(self.soupy_data.find("meta", { "name": "description"})["content"])
         except:
             page_info['description'] = " "
 

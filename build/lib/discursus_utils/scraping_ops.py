@@ -33,4 +33,6 @@ def get_meta_data(context, df_urls):
         df_enhanced_urls.loc[df_length] = row
     context.log.info("Enhanced " + str(df_enhanced_urls.index.size) + " urls")
 
+    print(df_enhanced_urls)
+
     return df_enhanced_urls
